@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="login_background">#A6D785</color>
+    <color name="white">#ffffff</color>
+    <color name="bg_btn_join">#1e6258</color>
+    <color name="black">#000000</color>
+</resources>

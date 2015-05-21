@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Hangman</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="facebook_app_id">1565833043680573</string>
+    <string name="app_title">Hangman</string>
+    <string name="btn_join">Sign In</string>
+    <string name="btn_register">Sign Up</string>
+    <string name="btn_forgot_password">Forgot Password</string>
+    <string name="title_activity_lobby">LobbyActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
+
+    <string name="rest_url_register">http://128.199.62.35:8003/hangman/users/register</string>
+    <string name="rest_url_login">http://128.199.62.35:8003/hangman/users/login</string>
+    <string name="rest_url_logout">http://128.199.62.35:8003/hangman/users/logout</string>
+    <string name="rest_url_reset_password">http://128.199.62.35:8003/hangman/users/reset_password</string>
+    <string name="rest_url_forgot_password">http://128.199.62.35:8003/hangman/users/forgot_password</string>
+    <string name="rest_url_get_profile">http://128.199.62.35:8003/hangman/users/profile</string>
+    <string name="rest_url_update_status">http://128.199.62.35:8003/hangman/users/profile/status</string>
+    <string name="rest_url_update_nickname">http://128.199.62.35:8003/hangman/users/profile/nickname</string>
+    <string name="rest_url_update_birthday">http://128.199.62.35:8003/hangman/users/profile/birthday</string>
+    <string name="rest_url_get_lobby">http://128.199.62.35:8003/hangman/session/lobby</string>
+    <string name="rest_url_set_challenge">http://128.199.62.35:8003/hangman/session/challenge</string>
+    <string name="rest_url_response_challenge">http://128.199.62.35:8003/hangman/session/challenge</string>
+    <string name="rest_url_init_game">http://128.199.62.35:8003/hangman/session/init_game</string>
+
+</resources>
