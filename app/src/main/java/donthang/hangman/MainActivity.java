@@ -110,57 +110,14 @@ public class MainActivity extends Activity {
 
             // Sign in
             Button signinButton = (Button) findViewById(R.id.btnJoin);
-            final EditText emailText = (EditText)findViewById(R.id.email);
-            final EditText passwordText = (EditText)findViewById(R.id.password);
+            final EditText emailEditText = (EditText)findViewById(R.id.email);
+            final EditText passwordEditText = (EditText)findViewById(R.id.password);
 
             signinButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String tag_login = "login";
-                    Map<String,String> jsonParams = new HashMap<String,String>();
-                    jsonParams.put("email",emailText.getText().toString());
-                    jsonParams.put("password",passwordText.getText().toString());
-
-                    JsonObjectRequest jsonObjReq = new JsonObjectRequest(
-                            Request.Method.POST,
-                            getString(R.string.rest_url_login),
-                            new JSONObject(jsonParams),
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    try {
-                                        JSONObject jsonMeta = new JSONObject(response.getString("meta"));
-                                        if (jsonMeta.getString("status").equals("200")){
-                                            Intent intent = new Intent(getApplication(),LobbyActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        }
-                                        else {
-                                            Toast.makeText(getApplicationContext(),"Unrregisted user", Toast.LENGTH_LONG).show();
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_LONG).show();
-                                }
-                            }) {
-
-                        @Override
-                        public Map<String,String> getHeaders() throws AuthFailureError {
-                            HashMap<String, String> headers = new HashMap<String, String>();
-                            headers.put("Content-Type", "application/json; charset=utf-8");
-                            return headers;
-                        }
-                    };
-                    jsonObjReq.setTag(tag_login);
-                    requestQueue.add(jsonObjReq);
-                }
-            });
+                    POSTFunctions.login(MainActivity.this, requestQueue, emailEditText.getText().toString(), passwordEditText.getText().toString());
+            }});
 
 
             // Forgot Password
@@ -198,6 +155,13 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onStop() {
+        super.onStop();
+        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
+            @Override
+            public boolean apply(Request<?> request) {
+                return true;
+            }
+        });
         finish();
     }
 

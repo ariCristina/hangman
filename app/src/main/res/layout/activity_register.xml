@@ -49,7 +49,7 @@
             android:background="@color/bg_btn_join"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:text="@string/btn_join"
+            android:text="@string/btn_register"
             android:textColor="@color/white" />
     </LinearLayout>
 </RelativeLayout>
