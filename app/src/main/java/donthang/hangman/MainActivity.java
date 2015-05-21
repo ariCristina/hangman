@@ -34,6 +34,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -128,7 +129,8 @@ public class MainActivity extends Activity {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     try {
-                                        if (response.getString("status").equals("200")){
+                                        JSONObject jsonMeta = new JSONObject(response.getString("meta"));
+                                        if (jsonMeta.getString("status").equals("200")){
                                             Intent intent = new Intent(getApplication(),LobbyActivity.class);
                                             startActivity(intent);
                                             finish();
