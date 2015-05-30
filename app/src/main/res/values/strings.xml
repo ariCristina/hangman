@@ -24,5 +24,6 @@
     <string name="rest_url_set_challenge">http://128.199.62.35:8003/hangman/session/challenge</string>
     <string name="rest_url_response_challenge">http://128.199.62.35:8003/hangman/session/challenge</string>
     <string name="rest_url_init_game">http://128.199.62.35:8003/hangman/session/init_game</string>
+    <string name="title_activity_create_challenge">CreateChallengeActivity</string>
 
 </resources>

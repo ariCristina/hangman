@@ -32,7 +32,8 @@
         <activity
             android:name=".LobbyActivity"
             android:label="@string/title_activity_lobby"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="donthang.hangman.MainActivity" />
@@ -44,6 +45,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="donthang.hangman.MainActivity" />
+        </activity>
+        <activity
+            android:name=".CreateChallengeActivity"
+            android:label="@string/title_activity_create_challenge"
+            android:parentActivityName=".LobbyActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="donthang.hangman.LobbyActivity" />
         </activity>
     </application>
 
