@@ -62,6 +62,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="donthang.hangman.LobbyActivity" />
         </activity>
+        <activity
+            android:name=".GameActivity"
+            android:label="@string/title_activity_game"
+            android:parentActivityName=".ProfileActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="donthang.hangman.ProfileActivity" />
+        </activity>
     </application>
 
 </manifest>

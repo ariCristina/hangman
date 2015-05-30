@@ -193,7 +193,8 @@ public class POSTFunctions {
                             if (jsonMeta.getString("status").equals("200")){
                                 JSONArray users = response.getJSONArray("content");
 
-                                // UPDATE THE LOBBY HERE
+                                // UPDATE LOBBY HERE
+
 
                             }
                             else {
@@ -351,6 +352,107 @@ public class POSTFunctions {
                             }
                             else {
                                 Toast.makeText(activity, "Couldn't send challange", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(activity, "ERROR", Toast.LENGTH_LONG).show();
+                    }
+                }) {
+
+            @Override
+            public Map<String,String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        jsonObjReq.setTag(tag_login);
+        requestQueue.add(jsonObjReq);
+    }
+
+    public static void getChallanges(final Activity activity, RequestQueue requestQueue,
+                                final String user_id, final String access_token) {
+        String tag_getChallanges = "get_challanges";
+        Map<String,String> jsonParams = new HashMap<String,String>();
+
+        jsonParams.put("user_id",user_id);
+        jsonParams.put("access_token", access_token);
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.POST,
+                activity.getResources().getString(R.string.rest_url_notifications_list),
+                new JSONObject(jsonParams),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            JSONObject jsonMeta = new JSONObject(response.getString("meta"));
+                            if (jsonMeta.getString("status").equals("200")){
+                                JSONArray notifications = response.getJSONArray("content");
+
+                                // UPDATE THE NOTIFICATION LIST HERE
+
+                            }
+                            else {
+                                Toast.makeText(activity, "Couldn't fetch lobby", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(activity, "ERROR", Toast.LENGTH_LONG).show();
+                    }
+                }) {
+
+            @Override
+            public Map<String,String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        jsonObjReq.setTag(tag_getChallanges);
+        requestQueue.add(jsonObjReq);
+    }
+
+    public static void init_game(final Activity activity, RequestQueue requestQueue, String user_id,
+                                 String access_token, String challenge_id) {
+        String tag_login = "login";
+        Map<String,String> jsonParams = new HashMap<String,String>();
+
+        jsonParams.put("user_id",user_id);
+        jsonParams.put("access_token", access_token);
+        jsonParams.put("challenge_id", challenge_id);
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.POST,
+                activity.getResources().getString(R.string.rest_url_init_game),
+                new JSONObject(jsonParams),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject jsonMeta = new JSONObject(response.getString("meta"));
+                            if (jsonMeta.getString("status").equals("200")){
+                                Intent intent = new Intent(activity,GameActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("gameInfo", response.toString());
+                                activity.startActivity(intent);
+                                activity.finish();
+                            }
+                            else {
+                                Toast.makeText(activity, "Couldn't begin challenge", Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

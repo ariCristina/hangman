@@ -5,6 +5,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -13,43 +16,28 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class CreateChallengeActivity extends Activity {
-    static JSONObject jsonRequestInfo;
+public class GameActivity extends Activity {
+    static JSONObject jsonGameInfo;
     RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_challenge);
+        setContentView(R.layout.activity_game);
 
-        String requestInfo = getIntent().getStringExtra("requestInfo");
+        String gameInfo = getIntent().getStringExtra("gameInfo");
+
         try {
-            jsonRequestInfo = new JSONObject(requestInfo);
+            jsonGameInfo = new JSONObject(gameInfo);
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), "Json error", Toast.LENGTH_LONG).show();
-        }
-
-        // Enter challange parameters here
-        String phrase = null;
-        String tips = null;
-        String known = null;
-        String timer = null;
-
-        // Send request
-        try {
-            POSTFunctions.setChallange(CreateChallengeActivity.this, requestQueue,
-                    jsonRequestInfo.getString("user_id"), jsonRequestInfo.getString("access_token"),
-                    jsonRequestInfo.getString("comes_from"), jsonRequestInfo.getString("goes_to"),
-                    phrase, known, timer, tips);
-        } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(), "Error sending challange", Toast.LENGTH_LONG);
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_challenge, menu);
+        getMenuInflater().inflate(R.menu.menu_game, menu);
         return true;
     }
 

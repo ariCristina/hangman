@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -38,11 +40,31 @@ public class LobbyActivity extends Activity {
 
         final Button searchButton = (Button) findViewById(R.id.btnSearch);
         final EditText searchEditText = (EditText) findViewById(R.id.search);
+        final ListView lobbyList = (ListView) findViewById(R.id.lobby_list);
+        final Button logoutButton = (Button) findViewById(R.id.logout_button);
+        final Button profileButton = (Button) findViewById(R.id.profile_button);
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             }
         });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this,);
     }
 
     @Override
@@ -66,6 +88,5 @@ public class LobbyActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }
 
