@@ -5,14 +5,46 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.android.volley.RequestQueue;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class CreateChallengeActivity extends Activity {
+    static JSONObject jsonRequestInfo;
+    RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_challenge);
+
+        String requestInfo = getIntent().getStringExtra("requestInfo");
+        try {
+            jsonRequestInfo = new JSONObject(requestInfo);
+        } catch (JSONException e) {
+            Toast.makeText(getApplicationContext(), "Json error", Toast.LENGTH_LONG).show();
+        }
+
+        // Enter challange parameters here
+        String phrase = null;
+        String tips = null;
+        String known = null;
+        String timer = null;
+
+        // Send request
+        try {
+            POSTFunctions.setChallange(CreateChallengeActivity.this, requestQueue,
+                    jsonRequestInfo.getString("user_id"), jsonRequestInfo.getString("access_token"),
+                    jsonRequestInfo.getString("comes_from"), jsonRequestInfo.getString("goes_to"),
+                    phrase, known, timer, tips);
+        } catch (JSONException e) {
+            Toast.makeText(getApplicationContext(), "Error sending challange", Toast.LENGTH_LONG);
+        }
+        
     }
 
     @Override

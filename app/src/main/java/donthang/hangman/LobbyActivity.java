@@ -33,22 +33,14 @@ public class LobbyActivity extends Activity {
         try {
             credentials = new JSONObject(creds);
         } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(),"Json error",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Json error", Toast.LENGTH_LONG).show();
         }
 
-        POSTFunctions
-        final Button searchButton = (Button)findViewById(R.id.btnSearch);
+        final Button searchButton = (Button) findViewById(R.id.btnSearch);
         final EditText searchEditText = (EditText) findViewById(R.id.search);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String user = searchEditText.getText().toString();
-                try {
-                    POSTFunctions.searchUser(LobbyActivity.this, requestQueue,
-                            credentials.getString("user_id"), credentials.getString("access_token"),
-                            searchEditText.getText().toString());
-                } catch (JSONException e) {};
-                Toast.makeText(getApplicationContext(), "Unable to find user", Toast.LENGTH_LONG);
             }
         });
     }
