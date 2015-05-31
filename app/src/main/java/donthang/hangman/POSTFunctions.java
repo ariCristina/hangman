@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class POSTFunctions {
@@ -24,8 +25,8 @@ public class POSTFunctions {
         String tag_login = "login";
         Map<String,String> jsonParams = new HashMap<String,String>();
 
-        jsonParams.put("email",email);
-        jsonParams.put("password", password);
+        jsonParams.put("email","sergiu.caraian@gmail.com");
+        jsonParams.put("password", "1234");
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(
                 Request.Method.POST,
@@ -37,9 +38,10 @@ public class POSTFunctions {
                         try {
                             JSONObject jsonMeta = new JSONObject(response.getString("meta"));
                             if (jsonMeta.getString("status").equals("200")){
+                                JSONObject jsonContent = new JSONObject(response.getString("content"));
                                 Intent intent = new Intent(activity,LobbyActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.putExtra("credentials", response.toString());
+                                intent.putExtra("credentials", jsonContent.toString());
                                 activity.startActivity(intent);
                                 activity.finish();
                             }
@@ -168,6 +170,7 @@ public class POSTFunctions {
     }
 
     public static void getLobby(final Activity activity, RequestQueue requestQueue,
+                                    final List<User> usersList,
                                     final String user_id, final String access_token,
                                     final String filter, final String keyphrase,
                                     final String status) {
@@ -190,12 +193,18 @@ public class POSTFunctions {
 
                         try {
                             JSONObject jsonMeta = new JSONObject(response.getString("meta"));
+
                             if (jsonMeta.getString("status").equals("200")){
                                 JSONArray users = response.getJSONArray("content");
 
-                                // UPDATE LOBBY HERE
-
-
+                                for(int i=0; i<users.length(); ++i) {
+                                    JSONObject crtUser = users.getJSONObject(i);
+                                    usersList.add(new User(crtUser.getString("user_id"),
+                                            crtUser.getString("nickname"),
+                                            crtUser.getString("status"),
+                                            crtUser.getString("avatar"),
+                                            crtUser.getString("interests")));
+                                }
                             }
                             else {
                                 Toast.makeText(activity, "Couldn't fetch lobby", Toast.LENGTH_LONG).show();
@@ -317,7 +326,7 @@ public class POSTFunctions {
         requestQueue.add(jsonObjReq);
     }
 
-    public static void setChallange(final Activity activity, RequestQueue requestQueue,
+    public static void setChallenge(final Activity activity, RequestQueue requestQueue,
                                     String user_id, String access_token,
                                     String comes_from, String goes_to,
                                     String phrase, String known,

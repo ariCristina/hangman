@@ -5,9 +5,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,50 +25,33 @@ public class CreateChallengeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_challenge);
+        requestQueue = Volley.newRequestQueue(this);
 
-        String requestInfo = getIntent().getStringExtra("requestInfo");
+        final EditText phraseText = (EditText) findViewById(R.id.phrase);
+        final EditText tipsText = (EditText) findViewById(R.id.tips);
+        final EditText knownLettersText = (EditText) findViewById(R.id.known_letters);
+        Button sendChallengeButton = (Button) findViewById(R.id.btnSendChallange);
+
+        final String challengeInfo = getIntent().getStringExtra("challengeInfo");
         try {
-            jsonRequestInfo = new JSONObject(requestInfo);
+            jsonRequestInfo = new JSONObject(challengeInfo);
+            final String user_id = jsonRequestInfo.getString("user_id");
+            final String access_token = jsonRequestInfo.getString("access_token");
+            final String comes_from = jsonRequestInfo.getString("comes_from");
+            final String goes_to = jsonRequestInfo.getString("goes_to");
+
+            sendChallengeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    POSTFunctions.setChallenge(CreateChallengeActivity.this, requestQueue,
+                            user_id, access_token, comes_from, goes_to,
+                            phraseText.getText().toString(),
+                            knownLettersText.getText().toString(),
+                            "999999", tipsText.getText().toString());
+                }
+            });
         } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(), "Json error", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"JSON error", Toast.LENGTH_LONG).show();
         }
-
-        // Enter challange parameters here
-        String phrase = null;
-        String tips = null;
-        String known = null;
-        String timer = null;
-
-        // Send request
-        try {
-            POSTFunctions.setChallange(CreateChallengeActivity.this, requestQueue,
-                    jsonRequestInfo.getString("user_id"), jsonRequestInfo.getString("access_token"),
-                    jsonRequestInfo.getString("comes_from"), jsonRequestInfo.getString("goes_to"),
-                    phrase, known, timer, tips);
-        } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(), "Error sending challange", Toast.LENGTH_LONG);
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_challenge, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

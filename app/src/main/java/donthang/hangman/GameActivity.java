@@ -32,6 +32,8 @@ public class GameActivity extends Activity {
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), "Json error", Toast.LENGTH_LONG).show();
         }
+
+
     }
 
     @Override

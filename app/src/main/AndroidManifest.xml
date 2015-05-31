@@ -33,7 +33,8 @@
             android:name=".LobbyActivity"
             android:label="@string/title_activity_lobby"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="donthang.hangman.MainActivity" />
@@ -41,7 +42,8 @@
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="donthang.hangman.MainActivity" />
@@ -49,7 +51,8 @@
         <activity
             android:name=".CreateChallengeActivity"
             android:label="@string/title_activity_create_challenge"
-            android:parentActivityName=".LobbyActivity" >
+            android:parentActivityName=".LobbyActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="donthang.hangman.LobbyActivity" />
@@ -57,7 +60,8 @@
         <activity
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile"
-            android:parentActivityName=".LobbyActivity" >
+            android:parentActivityName=".LobbyActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="donthang.hangman.LobbyActivity" />
@@ -65,7 +69,8 @@
         <activity
             android:name=".GameActivity"
             android:label="@string/title_activity_game"
-            android:parentActivityName=".ProfileActivity" >
+            android:parentActivityName=".ProfileActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="donthang.hangman.ProfileActivity" />
