@@ -17,6 +17,7 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="btn_change_password">Set Password</string>
     <string name="btn_change_nickname">Set Nickname</string>
+    <string name="btn_letter">Enter Letter</string>
 
     <string name="rest_url_register">http://128.199.62.35:8003/hangman/users/register</string>
     <string name="rest_url_login">http://128.199.62.35:8003/hangman/users/login</string>

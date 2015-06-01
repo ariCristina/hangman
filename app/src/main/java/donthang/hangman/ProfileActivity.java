@@ -107,4 +107,10 @@ public class ProfileActivity extends Activity implements AdapterView.OnItemClick
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        onDestroy();
+    }
 }

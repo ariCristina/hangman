@@ -439,8 +439,8 @@ public class POSTFunctions {
         requestQueue.add(jsonObjReq);
     }
 
-    public static void init_game(final Activity activity, RequestQueue requestQueue, String user_id,
-                                 String access_token, String challenge_id) {
+    public static void init_game(final Activity activity, final RequestQueue requestQueue, final String user_id,
+                                 final String access_token, final String challenge_id) {
         String tag_init_game = "init_game";
         Map<String,String> jsonParams = new HashMap<String,String>();
 
@@ -458,9 +458,11 @@ public class POSTFunctions {
                         try {
                             JSONObject jsonMeta = new JSONObject(response.getString("meta"));
                             if (jsonMeta.getString("status").equals("200")){
+                                JSONObject jsonContent = new JSONObject(response.getString("content"));
                                 Intent intent = new Intent(activity,GameActivity.class);
-                                intent.putExtra("gameInfo", response.toString());
+                                intent.putExtra("gameInfo", jsonContent.toString());
                                 activity.startActivity(intent);
+                                POSTFunctions.notifications_remove(activity,requestQueue,user_id,access_token,challenge_id);
                             }
                             else {
                                 Toast.makeText(activity, "Couldn't begin challenge", Toast.LENGTH_LONG).show();
@@ -583,6 +585,52 @@ public class POSTFunctions {
             }
         };
         jsonObjReq.setTag(tag_reset_password);
+        requestQueue.add(jsonObjReq);
+    }
+
+    public static void notifications_remove(final Activity activity, RequestQueue requestQueue,
+                                     String user_id, String access_token, String notification_id) {
+        String tag_notifications_remove = "notifications_remove";
+        Map<String,String> jsonParams = new HashMap<String,String>();
+
+        jsonParams.put("user_id",user_id);
+        jsonParams.put("access_token", access_token);
+        jsonParams.put("notification_id", notification_id);
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.PUT,
+                activity.getResources().getString(R.string.rest_url_notifications_remove),
+                new JSONObject(jsonParams),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject jsonMeta = new JSONObject(response.getString("meta"));
+                            if (jsonMeta.getString("status").equals("200")) {
+                            }
+                            else {
+                                Toast.makeText(activity, "Couldn't remove challenge", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(activity,"Server Error removing challenge",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(activity, "Server Error", Toast.LENGTH_LONG).show();
+                    }
+                }) {
+
+            @Override
+            public Map<String,String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        jsonObjReq.setTag(tag_notifications_remove);
         requestQueue.add(jsonObjReq);
     }
 }
