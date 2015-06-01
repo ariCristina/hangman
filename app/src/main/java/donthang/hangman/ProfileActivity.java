@@ -90,7 +90,8 @@ public class ProfileActivity extends Activity implements AdapterView.OnItemClick
         Challenge selectedChallenge = challengeList.get(position);
 
         try {
-            POSTFunctions.init_game(this, requestQueue, credentials.getString("user_id"), credentials.getString("access_token"), selectedChallenge.getChallengeId());
+            POSTFunctions.init_game(this, requestQueue, credentials.getString("user_id"), credentials.getString("access_token"),
+                    selectedChallenge.getChallengeId(), selectedChallenge.getNotificationId());
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(),"Couldn't enter challenge (JSON Error)", Toast.LENGTH_LONG).show();
         }

@@ -121,9 +121,9 @@ public class POSTFunctions {
         String tag_register = "register";
         Map<String,String> jsonParams = new HashMap<String,String>();
 
-        jsonParams.put("email",email);
-        jsonParams.put("password", password);
         jsonParams.put("nickname", nickname);
+        jsonParams.put("password", password);
+        jsonParams.put("email",email);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(
                 Request.Method.POST,
@@ -139,10 +139,10 @@ public class POSTFunctions {
                                 activity.finish();
                             }
                             else {
-                                Toast.makeText(activity, "User already registered", Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity, jsonMeta.getString("status"), Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Toast.makeText(activity,"JSON exception thrown",Toast.LENGTH_LONG).show();
                         }
                     }
                 },
@@ -406,7 +406,8 @@ public class POSTFunctions {
 
                                 for(int i=0; i<challenges.length(); ++i) {
                                     JSONObject crtChallenge = challenges.getJSONObject(i);
-                                    challengeList.add(new Challenge(crtChallenge.getString("message"),
+                                    challengeList.add(new Challenge(crtChallenge.getString("notification_id"),
+                                            crtChallenge.getString("message"),
                                             crtChallenge.getString("challenge_id"),
                                             crtChallenge.getString("status")));
                                 }
@@ -440,7 +441,7 @@ public class POSTFunctions {
     }
 
     public static void init_game(final Activity activity, final RequestQueue requestQueue, final String user_id,
-                                 final String access_token, final String challenge_id) {
+                                 final String access_token, final String challenge_id, final String notification_id) {
         String tag_init_game = "init_game";
         Map<String,String> jsonParams = new HashMap<String,String>();
 
@@ -462,7 +463,7 @@ public class POSTFunctions {
                                 Intent intent = new Intent(activity,GameActivity.class);
                                 intent.putExtra("gameInfo", jsonContent.toString());
                                 activity.startActivity(intent);
-                                POSTFunctions.notifications_remove(activity,requestQueue,user_id,access_token,challenge_id);
+                                POSTFunctions.notifications_remove(activity, requestQueue, user_id, access_token, notification_id);
                             }
                             else {
                                 Toast.makeText(activity, "Couldn't begin challenge", Toast.LENGTH_LONG).show();
