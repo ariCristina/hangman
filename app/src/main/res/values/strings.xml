@@ -12,8 +12,11 @@
     <string name="btn_logout">Logout</string>
     <string name="btn_search">Search</string>
     <string name="btn_set_challenge">Set Challange</string>
+    <string name="btn_reset_password">Reset Password</string>
     <string name="title_activity_lobby">LobbyActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="btn_change_password">Set Password</string>
+    <string name="btn_change_nickname">Set Nickname</string>
 
     <string name="rest_url_register">http://128.199.62.35:8003/hangman/users/register</string>
     <string name="rest_url_login">http://128.199.62.35:8003/hangman/users/login</string>
@@ -28,12 +31,15 @@
     <string name="rest_url_set_challenge">http://128.199.62.35:8003/hangman/session/challenge</string>
     <string name="rest_url_response_challenge">http://128.199.62.35:8003/hangman/session/challenge</string>
     <string name="rest_url_init_game">http://128.199.62.35:8003/hangman/session/init_game</string>
-    <string name="rest_url_notifications_list">http://128.199.62.35:8003/hangman/notifications</string>
-    <string name="rest_url_notifications_update">http://128.199.62.35:8003/hangman/notifications/update</string>
-    <string name="rest_url_notifications_remove">http://128.199.62.35:8003/hangman/notifications/remove</string>
+    <string name="rest_url_notifications_list">http://128.199.62.35:8003/hangman/notification</string>
+    <string name="rest_url_notifications_update">http://128.199.62.35:8003/hangman/notification/update</string>
+    <string name="rest_url_notifications_remove">http://128.199.62.35:8003/hangman/notification/remove</string>
 
     <string name="title_activity_create_challenge">CreateChallengeActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_game">GameActivity</string>
+    <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
+    <string name="title_activity_change_nickname">ChangeNicknameActivity</string>
+    <string name="title_activity_change_password">ChangePasswordActivity</string>
 
 </resources>

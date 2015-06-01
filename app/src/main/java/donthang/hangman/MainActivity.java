@@ -76,7 +76,6 @@ public class MainActivity extends Activity {
             loginButton.setReadPermissions("user_friends");
 
             // Register facebook button callback
-
             loginButton.registerCallback(callbackManager,
                     new FacebookCallback<LoginResult>() {
                         @Override
@@ -97,14 +96,13 @@ public class MainActivity extends Activity {
                         }
                     });
 
-            // Register
+            // Normal registration
             Button signupButton = (Button) findViewById(R.id.signup_button);
             signupButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
                     startActivity(intent);
-                    finish();
                 }
             });
 
@@ -112,7 +110,6 @@ public class MainActivity extends Activity {
             Button signinButton = (Button) findViewById(R.id.btnJoin);
             final EditText emailEditText = (EditText)findViewById(R.id.email);
             final EditText passwordEditText = (EditText)findViewById(R.id.password);
-
             signinButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -125,45 +122,23 @@ public class MainActivity extends Activity {
             forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //REST forgot password
-
+                    Intent intent = new Intent(MainActivity.this, ForgotPasswordActivity.class);
+                    startActivity(intent);
                 }
             });
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
+        // Cancel all pending requests
         requestQueue.cancelAll(new RequestQueue.RequestFilter() {
             @Override
             public boolean apply(Request<?> request) {
                 return true;
             }
         });
-        finish();
     }
 
     @Override
@@ -176,6 +151,5 @@ public class MainActivity extends Activity {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         return accessToken != null;
     }
-
 
 }

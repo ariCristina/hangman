@@ -10,12 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 
 public class CreateChallengeActivity extends Activity {
     static JSONObject jsonRequestInfo;
@@ -51,7 +51,19 @@ public class CreateChallengeActivity extends Activity {
                 }
             });
         } catch (JSONException e) {
-            Toast.makeText(getApplicationContext(),"JSON error", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"JSON error creating challenge", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Cancel all pending requests
+        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
+            @Override
+            public boolean apply(Request<?> request) {
+                return true;
+            }
+        });
     }
 }

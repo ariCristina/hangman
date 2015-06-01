@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_background" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="20dp" >
+
+        <EditText
+            android:id="@+id/nickname_edit_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:hint="New Nickname"
+            android:padding="10dp" />
+
+        <Button
+            android:id="@+id/nickname_edit_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:background="@color/bg_btn_join"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:text="@string/btn_change_nickname"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</RelativeLayout>

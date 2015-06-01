@@ -25,8 +25,8 @@ public class POSTFunctions {
         String tag_login = "login";
         Map<String,String> jsonParams = new HashMap<String,String>();
 
-        jsonParams.put("email","sergiu.caraian@gmail.com");
-        jsonParams.put("password", "1234");
+        jsonParams.put("email", email);
+        jsonParams.put("password", password);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(
                 Request.Method.POST,
@@ -40,7 +40,6 @@ public class POSTFunctions {
                             if (jsonMeta.getString("status").equals("200")){
                                 JSONObject jsonContent = new JSONObject(response.getString("content"));
                                 Intent intent = new Intent(activity,LobbyActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra("credentials", jsonContent.toString());
                                 activity.startActivity(intent);
                                 activity.finish();
@@ -89,7 +88,6 @@ public class POSTFunctions {
                             JSONObject jsonMeta = new JSONObject(response.getString("meta"));
                             if (jsonMeta.getString("status").equals("200")){
                                 Intent intent = new Intent(activity,MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 activity.startActivity(intent);
                                 activity.finish();
                             }
@@ -136,15 +134,12 @@ public class POSTFunctions {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONObject jsonMeta = new JSONObject(response.getString("meta"));
-                            if (jsonMeta.getString("status").equals("201")){
-                                Intent intent = new Intent(activity,MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                Toast.makeText(activity, "Registered succesfully", Toast.LENGTH_LONG);
-                                activity.startActivity(intent);
+                            if (jsonMeta.getString("status").equals("200")) {
+                                Toast.makeText(activity, "Registered successfully", Toast.LENGTH_LONG).show();
                                 activity.finish();
                             }
                             else {
-                                Toast.makeText(activity, "Error registering", Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity, "User already registered", Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -154,7 +149,7 @@ public class POSTFunctions {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(activity, "ERROR", Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, "Server Error", Toast.LENGTH_LONG).show();
                     }
                 }) {
 
@@ -170,6 +165,7 @@ public class POSTFunctions {
     }
 
     public static void getLobby(final Activity activity, RequestQueue requestQueue,
+                                    final LobbyListAdapter adapter,
                                     final List<User> usersList,
                                     final String user_id, final String access_token,
                                     final String filter, final String keyphrase,
@@ -196,6 +192,7 @@ public class POSTFunctions {
 
                             if (jsonMeta.getString("status").equals("200")){
                                 JSONArray users = response.getJSONArray("content");
+                                usersList.clear();
 
                                 for(int i=0; i<users.length(); ++i) {
                                     JSONObject crtUser = users.getJSONObject(i);
@@ -205,6 +202,7 @@ public class POSTFunctions {
                                             crtUser.getString("avatar"),
                                             crtUser.getString("interests")));
                                 }
+                                adapter.notifyDataSetChanged();
                             }
                             else {
                                 Toast.makeText(activity, "Couldn't fetch lobby", Toast.LENGTH_LONG).show();
@@ -234,7 +232,7 @@ public class POSTFunctions {
 
 
     public static void forgot_password(final Activity activity, RequestQueue requestQueue, String email) {
-        String tag_register = "forgot_password";
+        String tag_forgot_password = "forgot_password";
         Map<String,String> jsonParams = new HashMap<String,String>();
 
         jsonParams.put("email",email);
@@ -250,6 +248,7 @@ public class POSTFunctions {
                             JSONObject jsonMeta = new JSONObject(response.getString("meta"));
                             if (jsonMeta.getString("status").equals("200")) {
                                 Toast.makeText(activity,"A new password has been sent to your email",Toast.LENGTH_LONG).show();
+                                activity.finish();
                             }
                             else {
                                 Toast.makeText(activity, "Error sending new password", Toast.LENGTH_LONG).show();
@@ -273,7 +272,7 @@ public class POSTFunctions {
                 return headers;
             }
         };
-        jsonObjReq.setTag(tag_register);
+        jsonObjReq.setTag(tag_forgot_password);
         requestQueue.add(jsonObjReq);
     }
 
@@ -331,7 +330,7 @@ public class POSTFunctions {
                                     String comes_from, String goes_to,
                                     String phrase, String known,
                                     String timer, String tips) {
-        String tag_login = "setChlallange";
+        String tag_set_challenge = "setChallenge";
         Map<String,String> jsonParams = new HashMap<String,String>();
 
         jsonParams.put("user_id",user_id);
@@ -353,17 +352,14 @@ public class POSTFunctions {
                         try {
                             JSONObject jsonMeta = new JSONObject(response.getString("meta"));
                             if (jsonMeta.getString("status").equals("200")){
-                                Toast.makeText(activity,"Challange sent",Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(activity,LobbyActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                activity.startActivity(intent);
+                                Toast.makeText(activity,"Challenge sent",Toast.LENGTH_LONG).show();
                                 activity.finish();
                             }
                             else {
                                 Toast.makeText(activity, "Couldn't send challange", Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Toast.makeText(activity, "Server Error", Toast.LENGTH_LONG).show();
                         }
                     }
                 },
@@ -381,13 +377,14 @@ public class POSTFunctions {
                 return headers;
             }
         };
-        jsonObjReq.setTag(tag_login);
+        jsonObjReq.setTag(tag_set_challenge);
         requestQueue.add(jsonObjReq);
     }
 
-    public static void getChallanges(final Activity activity, RequestQueue requestQueue,
-                                final String user_id, final String access_token) {
-        String tag_getChallanges = "get_challanges";
+    public static void getChallenges(final Activity activity, RequestQueue requestQueue,
+                                     final List<Challenge> challengeList, final ChallengeListAdapter adapter,
+                                    final String user_id, final String access_token) {
+        String tag_getChallenges = "get_challenges";
         Map<String,String> jsonParams = new HashMap<String,String>();
 
         jsonParams.put("user_id",user_id);
@@ -404,13 +401,20 @@ public class POSTFunctions {
                         try {
                             JSONObject jsonMeta = new JSONObject(response.getString("meta"));
                             if (jsonMeta.getString("status").equals("200")){
-                                JSONArray notifications = response.getJSONArray("content");
+                                JSONArray challenges = response.getJSONArray("content");
+                                challengeList.clear();
 
-                                // UPDATE THE NOTIFICATION LIST HERE
+                                for(int i=0; i<challenges.length(); ++i) {
+                                    JSONObject crtChallenge = challenges.getJSONObject(i);
+                                    challengeList.add(new Challenge(crtChallenge.getString("message"),
+                                            crtChallenge.getString("challenge_id"),
+                                            crtChallenge.getString("status")));
+                                }
 
+                                adapter.notifyDataSetChanged();
                             }
                             else {
-                                Toast.makeText(activity, "Couldn't fetch lobby", Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity, "Couldn't fetch challenges", Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -431,13 +435,13 @@ public class POSTFunctions {
                 return headers;
             }
         };
-        jsonObjReq.setTag(tag_getChallanges);
+        jsonObjReq.setTag(tag_getChallenges);
         requestQueue.add(jsonObjReq);
     }
 
     public static void init_game(final Activity activity, RequestQueue requestQueue, String user_id,
                                  String access_token, String challenge_id) {
-        String tag_login = "login";
+        String tag_init_game = "init_game";
         Map<String,String> jsonParams = new HashMap<String,String>();
 
         jsonParams.put("user_id",user_id);
@@ -455,16 +459,14 @@ public class POSTFunctions {
                             JSONObject jsonMeta = new JSONObject(response.getString("meta"));
                             if (jsonMeta.getString("status").equals("200")){
                                 Intent intent = new Intent(activity,GameActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra("gameInfo", response.toString());
                                 activity.startActivity(intent);
-                                activity.finish();
                             }
                             else {
                                 Toast.makeText(activity, "Couldn't begin challenge", Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Toast.makeText(activity, "JSON Exception onResponse", Toast.LENGTH_LONG).show();
                         }
                     }
                 },
@@ -482,7 +484,105 @@ public class POSTFunctions {
                 return headers;
             }
         };
-        jsonObjReq.setTag(tag_login);
+        jsonObjReq.setTag(tag_init_game);
+        requestQueue.add(jsonObjReq);
+    }
+
+    public static void update_nickname(final Activity activity, RequestQueue requestQueue,
+                                       String user_id, String access_token, String new_nickname) {
+        String tag_update_nickname = "update_nickname";
+        Map<String,String> jsonParams = new HashMap<String,String>();
+
+        jsonParams.put("user_id",user_id);
+        jsonParams.put("access_token", access_token);
+        jsonParams.put("new_nickname", new_nickname);
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.PUT,
+                activity.getResources().getString(R.string.rest_url_update_nickname),
+                new JSONObject(jsonParams),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject jsonMeta = new JSONObject(response.getString("meta"));
+                            if (jsonMeta.getString("status").equals("200")) {
+                                Toast.makeText(activity, "The nickname has been updated", Toast.LENGTH_LONG).show();
+                                activity.finish();
+                            }
+                            else {
+                                Toast.makeText(activity, "User already registered", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(activity,"Server Error",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(activity, "Server Error", Toast.LENGTH_LONG).show();
+                    }
+                }) {
+
+            @Override
+            public Map<String,String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        jsonObjReq.setTag(tag_update_nickname);
+        requestQueue.add(jsonObjReq);
+    }
+
+    public static void reset_password(final Activity activity, RequestQueue requestQueue,
+                                       String user_id, String access_token,
+                                       String old_password, String new_password) {
+        String tag_reset_password = "reset_password";
+        Map<String,String> jsonParams = new HashMap<String,String>();
+
+        jsonParams.put("user_id",user_id);
+        jsonParams.put("access_token", access_token);
+        jsonParams.put("old_password", old_password);
+        jsonParams.put("new_password", new_password);
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(
+                Request.Method.PUT,
+                activity.getResources().getString(R.string.rest_url_reset_password),
+                new JSONObject(jsonParams),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject jsonMeta = new JSONObject(response.getString("meta"));
+                            if (jsonMeta.getString("status").equals("200")) {
+                                Toast.makeText(activity, "The password has been changed", Toast.LENGTH_LONG).show();
+                                activity.finish();
+                            }
+                            else {
+                                Toast.makeText(activity, "Couldn't change password", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(activity,"Server Error",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(activity, "Server Error", Toast.LENGTH_LONG).show();
+                    }
+                }) {
+
+            @Override
+            public Map<String,String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        jsonObjReq.setTag(tag_reset_password);
         requestQueue.add(jsonObjReq);
     }
 }
