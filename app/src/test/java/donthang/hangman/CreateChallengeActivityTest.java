@@ -33,4 +33,16 @@ public class CreateChallengeActivityTest extends ActivityInstrumentationTestCase
         final boolean expected = false;
         assertEquals(result,expected);
     }
+
+    @Test
+    public void test1CheckStrings() throws Exception {
+        String user_id = "12313";
+        String auth_token = "ada";
+        String comes_from = "adad";
+        String goes_to = "1";
+
+        final boolean result = originalActivity.checkStrings(user_id,auth_token,comes_from,goes_to);
+        final boolean expected = true;
+        assertEquals(result,expected);
+    }
 }

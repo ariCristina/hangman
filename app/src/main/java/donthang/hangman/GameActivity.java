@@ -126,6 +126,10 @@ public class GameActivity extends Activity {
         return false;
     }
 
+    /*@ public normal_behavior
+        requires phraseArg!=null && knownArg!=null
+        ensures wonGame=true
+    */
     public boolean victoryCondition(String phraseArg, String knownArg) {
 
         for (int i = 0; i < knownArg.length(); ++i) {
@@ -138,6 +142,10 @@ public class GameActivity extends Activity {
         else return false;
     }
 
+    /*@ public normal_behavior
+        requires phraseArg!=null && knownArg!=null
+        ensures setPhraseBlanks
+    */
     public String setPhraseBlanks(String phraseArg, String knownArg) {
         for (int i = 0; i < phraseArg.length(); ++i) {
             if (known.indexOf(phraseArg.charAt(i)) == -1) {
@@ -149,14 +157,22 @@ public class GameActivity extends Activity {
         return phraseArg;
     }
 
+    /*@ public normal_behavior
+        requires newLetterArg!=null && knownArg!=null
+        ensures newLetterArg==true
+    */
     public boolean checkNewLetter(String newLetterArg, String knownArg) {
         if(newLetterArg.equals("") || knownArg.indexOf(newLetterArg.charAt(0)) != -1)
             return false;
         return true;
     }
 
+    /*@ public normal_behavior
+        requires triseRmainingArg>0
+        ensures lostGame==true
+    */
     public boolean loseCondition(int triesRemainingArg) {
-        if(triesRemainingArg==0) {
+        if(triesRemainingArg<=0) {
             lostGame = true;
             return true;
         }

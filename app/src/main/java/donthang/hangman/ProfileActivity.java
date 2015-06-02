@@ -34,6 +34,10 @@ public class ProfileActivity extends Activity implements AdapterView.OnItemClick
     List<Challenge> challengeList = new ArrayList<Challenge>();
     ChallengeListAdapter adapter;
 
+    /*@ protected normal_behavior
+    requires requestQueue!=null
+    ensures getChallenges()==challengeList
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +71,10 @@ public class ProfileActivity extends Activity implements AdapterView.OnItemClick
         }
 
         changeNicknameButton.setOnClickListener(new View.OnClickListener() {
+            /*@ public normal_behavior
+                requires onClick(View v)==true
+                ensures ChangeActivityName()=startActivity(ChangeActivityName)
+            */
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileActivity.this,ChangeNicknameActivity.class);
@@ -76,6 +84,10 @@ public class ProfileActivity extends Activity implements AdapterView.OnItemClick
         });
 
         changePasswordButton.setOnClickListener(new View.OnClickListener() {
+            /*@ public normal_behavior
+                requires onClick(View v)==true
+                ensures ChangePasswordActivity()=startActivity(ChangePasswordActivity)
+            */
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileActivity.this,ChangePasswordActivity.class);
@@ -85,6 +97,10 @@ public class ProfileActivity extends Activity implements AdapterView.OnItemClick
         });
     }
 
+    /*@ public normal_behvaior
+        requires parent!=null && view!=null && position>0 && id>0
+        ensures selectChallenge==true
+    */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Challenge selectedChallenge = challengeList.get(position);
