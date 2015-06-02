@@ -7,6 +7,7 @@ public class Challenge {
     private String status;
     private String notification_id;
 
+
     public Challenge(String notification_id, String message, String challenge_id, String status) {
         this.message = message;
         this.challenge_id = challenge_id;

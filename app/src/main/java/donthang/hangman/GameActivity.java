@@ -25,6 +25,8 @@ public class GameActivity extends Activity {
     private String known = "";
     private String tips = "";
     private String auxPhrase = "";
+    boolean wonGame = false;
+    boolean lostGame = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +45,12 @@ public class GameActivity extends Activity {
             phrase = jsonGameInfo.getString("phrase");
             known = jsonGameInfo.getString("known");
             tips = jsonGameInfo.getString("tips");
-        } catch(JSONException e) {
-            Toast.makeText(getApplicationContext(),"JSON exception: failed to fetch initial data", Toast.LENGTH_LONG).show();
+        } catch (JSONException e) {
+            Toast.makeText(getApplicationContext(),"Error JSON",Toast.LENGTH_LONG).show();
         }
 
-        if(phrase.length()==0) {
-            Toast.makeText(getApplicationContext(),"You Won! The word is _",Toast.LENGTH_LONG).show();
+        if (emptyPhrase(phrase)) {
+            Toast.makeText(getApplicationContext(), "You Won! The word is _", Toast.LENGTH_LONG).show();
             finish();
         }
 
@@ -60,24 +62,16 @@ public class GameActivity extends Activity {
         final Button inputButton = (Button) findViewById(R.id.letterBtn);
 
         // Check if there are any undiscovered letters
-        auxPhrase = phrase;
-        for(int i = 0; i<known.length(); ++i) {
-            auxPhrase = auxPhrase.replace(""+known.charAt(i),"");
-        }
-        if(auxPhrase.equals("")) {
-            Toast.makeText(getApplicationContext(),"You Won! The word is " + phrase,Toast.LENGTH_LONG).show();
+        if (victoryCondition(phrase,known)) {
+            Toast.makeText(getApplicationContext(), "You Won! The word is " + phrase, Toast.LENGTH_LONG).show();
             finish();
         }
 
         triesTextField.setText("Tries remaining : " + Integer.toString(triesRemaining));
-        auxPhrase = phrase;
-        for(int i = 0; i<auxPhrase.length(); ++i) {
-           if(known.indexOf(auxPhrase.charAt(i))==-1) {
-               char[] auxCharVector = auxPhrase.toCharArray();
-               auxCharVector[i] = '_';
-               auxPhrase = String.valueOf(auxCharVector);
-           }
-        }
+
+        // Set phrase blanks
+        String auxPhrase = setPhraseBlanks(phrase,known);
+
         phraseTextField.setText("Phrase : " + auxPhrase);
         knownTextField.setText("Known letters : " + known);
         tipsTextField.setText("Tips : " + tips);
@@ -87,39 +81,29 @@ public class GameActivity extends Activity {
             public void onClick(View v) {
 
                 String newLetter = inputTextField.getText().toString();
-                if(newLetter.equals("") || known.indexOf(newLetter.charAt(0))!=-1) {
-                    Toast.makeText(getApplicationContext(),"Please enter a new letter",Toast.LENGTH_LONG).show();
-                }
-                else {
+                if (!checkNewLetter(newLetter,known)) {
+                    Toast.makeText(getApplicationContext(), "Please enter a new letter", Toast.LENGTH_LONG).show();
+                } else {
                     triesRemaining--;
                     known = known + newLetter.charAt(0);
 
-                    // Check for victory
-                    auxPhrase = phrase;
-                    for(int i = 0; i<known.length(); ++i) {
-                        auxPhrase = auxPhrase.replace(""+known.charAt(i),"");
-                    }
-                    if(auxPhrase.equals("")) {
-                        Toast.makeText(getApplicationContext(),"You Won! The word is " + phrase,Toast.LENGTH_LONG).show();
+                    // Check for lose
+                    if (loseCondition(triesRemaining)) {
+                        Toast.makeText(getApplicationContext(), "You Lost! The word was " + phrase, Toast.LENGTH_LONG).show();
                         finish();
                     }
 
-                    // Check for lose
-                    if(triesRemaining == 0) {
-                        Toast.makeText(getApplicationContext(),"You Lost! The word was " + phrase,Toast.LENGTH_LONG).show();
+                    // Check for victory
+                    if(victoryCondition(phrase, known))
+                    {
+                        Toast.makeText(getApplicationContext(), "You Won! The word is " + phrase, Toast.LENGTH_LONG).show();
                         finish();
                     }
 
                     // Update Views
                     triesTextField.setText("Tries remaining : " + Integer.toString(triesRemaining));
-                    auxPhrase = phrase;
-                    for(int i = 0; i<auxPhrase.length(); ++i) {
-                        if(known.indexOf(auxPhrase.charAt(i))==-1) {
-                            char[] auxCharVector = auxPhrase.toCharArray();
-                            auxCharVector[i] = '_';
-                            auxPhrase = String.valueOf(auxCharVector);
-                        }
-                    }
+                    String auxPhrase = setPhraseBlanks(phrase,known);
+
                     phraseTextField.setText("Phrase : " + auxPhrase);
                     knownTextField.setText("Known letters : " + known);
                     tipsTextField.setText("Tips : " + tips);
@@ -132,5 +116,50 @@ public class GameActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
+    }
+
+    public boolean emptyPhrase(String phrase) {
+        if(phrase.length()==0) {
+            wonGame = true;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean victoryCondition(String phraseArg, String knownArg) {
+
+        for (int i = 0; i < knownArg.length(); ++i) {
+            phraseArg = phraseArg.replace("" + knownArg.charAt(i), "");
+        }
+        if (phraseArg.equals("")) {
+            wonGame = true;
+            return true;
+        }
+        else return false;
+    }
+
+    public String setPhraseBlanks(String phraseArg, String knownArg) {
+        for (int i = 0; i < phraseArg.length(); ++i) {
+            if (known.indexOf(phraseArg.charAt(i)) == -1) {
+                char[] auxCharVector = phraseArg.toCharArray();
+                auxCharVector[i] = '_';
+                phraseArg = String.valueOf(auxCharVector);
+            }
+        }
+        return phraseArg;
+    }
+
+    public boolean checkNewLetter(String newLetterArg, String knownArg) {
+        if(newLetterArg.equals("") || knownArg.indexOf(newLetterArg.charAt(0)) != -1)
+            return false;
+        return true;
+    }
+
+    public boolean loseCondition(int triesRemainingArg) {
+        if(triesRemainingArg==0) {
+            lostGame = true;
+            return true;
+        }
+        return false;
     }
 }

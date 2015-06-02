@@ -40,16 +40,20 @@ public class CreateChallengeActivity extends Activity {
             final String comes_from = jsonRequestInfo.getString("comes_from");
             final String goes_to = jsonRequestInfo.getString("goes_to");
 
-            sendChallengeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    POSTFunctions.setChallenge(CreateChallengeActivity.this, requestQueue,
-                            user_id, access_token, comes_from, goes_to,
-                            phraseText.getText().toString(),
-                            knownLettersText.getText().toString(),
-                            "999999", tipsText.getText().toString());
-                }
-            });
+            if(checkStrings(user_id,access_token,comes_from,goes_to)) {
+                sendChallengeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        POSTFunctions.setChallenge(CreateChallengeActivity.this, requestQueue,
+                                user_id, access_token, comes_from, goes_to,
+                                phraseText.getText().toString(),
+                                knownLettersText.getText().toString(),
+                                "999999", tipsText.getText().toString());
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(),"Strings not ok",Toast.LENGTH_LONG).show();
+            }
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(),"JSON error creating challenge", Toast.LENGTH_LONG).show();
         }
@@ -65,5 +69,11 @@ public class CreateChallengeActivity extends Activity {
                 return true;
             }
         });
+    }
+
+    public boolean checkStrings(String user_id,String access_token,String comes_from,String goes_to) {
+        if(user_id.length()==0 || access_token.length()==0 || comes_from.length()==0 || goes_to.length()==0)
+            return false;
+        else return true;
     }
 }
